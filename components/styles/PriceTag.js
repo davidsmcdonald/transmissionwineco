@@ -9,7 +9,7 @@ const PriceTag = styled.span`
   font-size: 1.2rem;
   display: inline-block;
   position: absolute;
-  bottom: 5px;
+  top: 185px;
   right: 0px;
 `;
 

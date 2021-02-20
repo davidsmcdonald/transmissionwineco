@@ -4,6 +4,7 @@ import Form from './styles/Form';
 import useForm from '../lib/useForm';
 import { CURRENT_USER_QUERY } from './User';
 import Error from './ErrorMessage'
+import { useRouter } from 'next/dist/client/router';
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -28,6 +29,7 @@ export default function SignIn() {
     email: '',
     password: '',
   });
+  const router = useRouter();
 
   const [signin, { data, loading }] = useMutation(SIGNIN_MUTATION, {
     variables: inputs,
@@ -38,7 +40,11 @@ export default function SignIn() {
   async function handleSubmit(e) {
     e.preventDefault();
     const res = await signin();
-    console.log(res);
+    if (res.data?.authenticateUserWithPassword.__typename ===
+      'UserAuthenticationWithPasswordSuccess'
+    ) {
+      router.push('/');
+    }
     resetForm();
   }
 

@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 import Link from 'next/link';
 import ItemStyles from './styles/ItemStyles';
 import PriceTag from './styles/PriceTag';
 import formatMoney from '../lib/formatMoney';
 import DeleteProduct from './DeleteProduct';
+import AddToCart from './AddToCart';
 
 export default function Product({ product }) {
   return (
@@ -16,16 +18,17 @@ export default function Product({ product }) {
       </p>
       <PriceTag>{formatMoney(product.price)}</PriceTag>
       <div className="buttonList">
-        <Link 
+        <Link
           href={{
-            pathname: 'update',
+            pathname: '/update',
             query: {
-            id: product.id,
+              id: product.id,
             },
           }}
         >
           Edit ✎
         </Link>
+        <AddToCart id={product.id} />
         <DeleteProduct id={product.id}>Delete</DeleteProduct>
       </div>
     </ItemStyles>

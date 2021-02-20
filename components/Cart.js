@@ -1,9 +1,14 @@
+/* eslint-disable react/prop-types */
 import styled from 'styled-components';
 import CartStyles from './styles/CartStyles';
 import CartTitle from './styles/CartTitle';
 import { useUser } from './User';
 import formatMoney from '../lib/formatMoney';
 import calcTotalPrice from '../lib/calcTotalPrice';
+import { useCart } from '../lib/cartState';
+import CloseButton from './styles/CloseButton';
+import DeleteFromCart from './DeleteFromCart';
+import Checkout from './Checkout';
 
 const CartItemStyles = styled.li`
   padding: 1rem 0;
@@ -23,7 +28,7 @@ function CartItem({ cartItem }) {
   const { product } = cartItem;
   if (!product) return null;
   return (
-    <CartItemStyles cartItem={cartItem}>
+    <CartItemStyles>
       <img
         width="100"
         src={product.photo.image.publicUrlTransformed}
@@ -38,18 +43,22 @@ function CartItem({ cartItem }) {
           </em>
         </p>
       </div>
+      <DeleteFromCart id={cartItem.id} />
     </CartItemStyles>
   );
 }
 
 export default function Cart() {
   const me = useUser();
+  const { cartOpen, closeCart } = useCart();
   if (!me) return null;
-  console.log(me);
   return (
-    <CartStyles open>
+    <CartStyles open={cartOpen}>
       <header>
         <CartTitle>My cart</CartTitle>
+        <CloseButton type="button" onClick={closeCart}>
+          &times;
+        </CloseButton>
       </header>
       <ul>
         {me.cart.map((cartItem) => (
@@ -59,6 +68,7 @@ export default function Cart() {
       <footer>
         <p>Total</p>
         <p>{formatMoney(calcTotalPrice(me.cart))}</p>
+        <Checkout />
       </footer>
     </CartStyles>
   );
